@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 typedef unsigned char BYTE;
 
@@ -17,6 +18,8 @@ struct time
 	int second;
 };
 
+typedef struct time TIME;
+
 enum color
 {
 	red,
@@ -28,10 +31,10 @@ int main(int argc, char *argv[])
 {
 	FILE *fp;
 	union hold element = {.b = 'a'};
-	struct time time;
+	TIME time;
 	enum color color = red;
 	BYTE charele = '1';
-	time = (struct time){
+	time = (TIME){
 		1, 2, 3};
 	enum color color1 = green;
 	printf("%d\n", time.hour);
@@ -42,6 +45,7 @@ int main(int argc, char *argv[])
 		fputs("Error opening a.txt file",stderr);
 		exit(1);
 	}
+	fputs("Error opening a.txt file",stderr);
 	rewind(fp);
 	fputs("sunchenchen",fp);
 	return 0;
