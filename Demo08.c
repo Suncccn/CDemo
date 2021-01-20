@@ -1,26 +1,33 @@
 #include <stdio.h>
 
-union hold{
+union hold
+{
 	int a;
 	char b;
 	double c;
 };
 
-struct time{
+struct time
+{
 	int hour;
 	int minute;
 	int second;
 };
 
-enum color{red,green,blue};
+enum color
+{
+	red,
+	green,
+	blue
+};
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])
+{
 	union hold element = {.b = 'a'};
-	struct time time ;
+	struct time time;
 	enum color color = red;
 	time = (struct time){
-		1,2,3
-	};
+		1, 2, 3};
 	enum color color1 = green;
 	printf("%d\n", time.hour);
 	return 0;
