@@ -4,6 +4,8 @@
 
 typedef unsigned char BYTE;
 
+typedef char * STRING;
+
 union hold
 {
 	int a;
@@ -32,6 +34,8 @@ int main(int argc, char *argv[])
 	FILE *fp;
 	union hold element = {.b = 'a'};
 	TIME time;
+	STRING k = "aaaa";
+	printf("%s\n",k);
 	enum color color = red;
 	BYTE charele = '1';
 	time = (TIME){
