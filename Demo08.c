@@ -6,6 +6,8 @@ typedef unsigned char BYTE;
 
 typedef char * STRING;
 
+typedef int array_5[5];
+
 union hold
 {
 	int a;
@@ -52,5 +54,8 @@ int main(int argc, char *argv[])
 	fputs("Error opening a.txt file",stderr);
 	rewind(fp);
 	fputs("sunchenchen",fp);
+
+	array_5 dogs = {1,2,3,4,5};
+	printf("%d\n",dogs[1]);
 	return 0;
 }
