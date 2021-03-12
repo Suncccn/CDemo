@@ -3,6 +3,12 @@
 		"locale": "cpp",
 		"complex.h": "c",
 		"time.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"atomic": "c",
+		"cstdlib": "c",
+		"ostream": "c",
+		"algorithm": "c",
+		"complex": "c",
+		"new": "c"
 	}
 }

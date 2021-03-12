@@ -2,10 +2,24 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-int main(int argc, char *argv[])
+struct A
 {
-	int count = 0;
-	scanf("%d",&count);
+	char a : 4;
+	int b : 4;
+	long c;
+};
 
-	return 0;
+typedef struct A ITEM;
+
+struct Node{
+	ITEM a;
+	struct Node *next;
+};
+
+typedef struct Node node;
+
+
+int main()
+{
+	printf("%ld\n",sizeof(struct A));
 }
