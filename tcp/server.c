@@ -1,60 +1,39 @@
-/*服务器端*/
-#include <stdio.h>
-#include <string.h>
 #include <sys/types.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <arpa/inet.h>
-#define PORT 8886
+#include <sys/socket.h>							// 包含套接字函数库
+#include <stdio.h>
+#include <netinet/in.h>							// 包含AF_INET相关结构
+#include <arpa/inet.h>							// 包含AF_INET相关操作的函数
+#include <unistd.h>
+
+#define PORT 3339
 
 int main(int argc, char **argv)
 {
-	struct sockaddr_in s_addr;	//服务器地址结构
-	struct sockaddr_in c_addr;	//客户端地址结构
-	int sock;			//套接字描述符
-	socklen_t addr_len;		//地址结构长度
-	int len;			//接收到的消息字节数
-	char buff[128];			//存放接收消息的缓冲区
-/* 创建数据报模式的套接字 */
-	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
-		perror("socket");
-		exit(errno);
-	}
-       	else
-		printf("create socket successful.\n\r");
-/*清空地址结构*/
-	memset(&s_addr, 0, sizeof(struct sockaddr_in));
-/* 设置地址和端口信息 */
-	s_addr.sin_family = AF_INET;
-//	if (argv[2])
-//		s_addr.sin_port = htons(atoi(argv[2]));
-//	else
-		s_addr.sin_port = htons(PORT);
-//	if (argv[1])
-//		s_addr.sin_addr.s_addr = inet_addr(argv[1]);
-//	else
-		s_addr.sin_addr.s_addr = INADDR_ANY;
-		s_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	int s_fd, c_fd;
+	struct sockaddr_in s_addr, c_addr;
+	int s_len,c_len;
+	char buf[256];
+	char sendbuf[256] = "recv success";
 
-/* 绑定地址和端口信息 */
-	if ((bind(sock, (struct sockaddr *) &s_addr, sizeof(s_addr))) == -1) {
-		perror("bind error");
-		exit(errno);
+	s_fd = socket(AF_INET, SOCK_STREAM, 0);
+
+	s_addr.sin_family = AF_INET;
+	s_addr.sin_port = htons(PORT);
+	s_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	s_len = sizeof(s_addr);
+	bind(s_fd, (struct sockaddr *)&s_addr, s_len);
+	listen(s_fd, 10);
+ 	printf("请稍候，等待客户端发送数据\n");
+	while (1)
+	{
+		c_len = sizeof(c_addr);
+		c_fd = accept(s_fd, (struct sockaddr *)&c_addr, (socklen_t *__restrict) &c_len);
+		printf("connect:%d\n", c_fd);
+		//recv
+		recv(c_fd, buf, 256, 0);
+		printf("server:%s\n", buf);
+		//send
+		send(c_fd, sendbuf, sizeof(sendbuf), 0);
+		close(c_fd);
 	}
-       	else
-		printf("bind address to socket successfuly.\n\r");
-/* 循环接收数据 */
-	addr_len = sizeof(c_addr);
-	while (1) {
-		len = recvfrom(sock, buff, sizeof(buff) - 1, 0,(struct sockaddr *) &c_addr, &addr_len);
-		if (len < 0) {//接收失败
-			perror("recvfrom error");
-			exit(errno);
-		}
-		buff[len] = '\0';
-		printf("收到来自远端计算机%s，端口号为%d的消息:\n%s\n\r",inet_ntoa(c_addr.sin_addr), ntohs(c_addr.sin_port), buff);
-	}
-	return 0;
 }
